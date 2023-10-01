@@ -6,6 +6,17 @@ from generator import occurrences_generator
 
 
 class TestGenerator(unittest.TestCase):
+    def test_with_no_occurences_found(self):
+        test_file_content = StringIO(
+            "Have you heard the news that you're dead?\n"
+            "No one ever had much nice to say\n"
+            "I think they never liked you anyway\n"
+        )
+        search_words = ["word"]
+
+        gen = occurrences_generator(test_file_content, search_words)
+        self.assertRaises(StopIteration, next, gen)
+
     def test_empty_file_object(self):
         test_file_content = StringIO("")
         search_words = ["word"]
@@ -40,9 +51,9 @@ class TestGenerator(unittest.TestCase):
 
     def test_with_few_words_in_each_line(self):
         test_file_content = StringIO(
-            "some line with long text and alot of words\n\
-                                     another line for testing generator\n\
-                                     third line with test text"
+            "some line with long text and alot of words\n                     "
+            "                another line for testing generator\n             "
+            "                        third line with test text"
         )
         search_words = ["with"]
         count = len(
