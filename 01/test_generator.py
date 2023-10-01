@@ -17,6 +17,22 @@ class TestGenerator(unittest.TestCase):
         gen = occurrences_generator(test_file_content, search_words)
         self.assertRaises(StopIteration, next, gen)
 
+    def test_with_matching_several_filters_simultaneously(self):
+        test_file_content = StringIO(
+            "this line contains banana and pineapple\n"
+            "this line does not contains search words\n"
+            "this line contains pineapple and banana and another banana"
+        )
+        search_words = ["banana", "pineapple"]
+
+        gen = occurrences_generator(test_file_content, search_words)
+        self.assertEqual("this line contains banana and pineapple", next(gen))
+        self.assertEqual(
+            "this line contains pineapple and banana and another banana",
+            next(gen),
+        )
+        self.assertRaises(StopIteration, next, gen)
+
     def test_empty_file_object(self):
         test_file_content = StringIO("")
         search_words = ["word"]
