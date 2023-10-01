@@ -12,9 +12,7 @@ class TestMeanDecorator(unittest.TestCase):
     @mock.patch("mean_decorator.time.time")
     def test_basic_case(self, time_mock, print_mock):
         calls_number = 100
-        time_mock.side_effect = [
-            0 if i % 2 == 0 else 1 for i in range(2 * calls_number)
-        ]
+        time_mock.side_effect = list(range(2 * calls_number))
 
         @mean(50)
         def empty_func():
