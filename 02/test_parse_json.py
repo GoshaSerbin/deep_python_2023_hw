@@ -15,6 +15,16 @@ class TestParseJson(unittest.TestCase):
             expected_calls = []
             self.assertEqual(expected_calls, callback_mock.mock_calls)
 
+    def test_empty_keywords(self):
+        json_str = '{"key1": "word1 word2", "key2": "word3 word4"}'
+        required_fields = ["field1", "field2"]
+        keywords = []
+
+        with mock.patch("parse_json.some_keyword_callback") as callback_mock:
+            parse_json(json_str, callback_mock, required_fields, keywords)
+            expected_calls = []
+            self.assertEqual(expected_calls, callback_mock.mock_calls)
+
     def test_basic_case(self):
         json_str = '{"key1": "word1 word2", "key2": "word3 word4"}'
         required_fields = ["key1"]
@@ -35,6 +45,20 @@ class TestParseJson(unittest.TestCase):
             expected_calls = [
                 mock.call("word1"),
                 mock.call("word5"),
+            ]
+            self.assertEqual(expected_calls, callback_mock.mock_calls)
+
+    def test_several_callbacks_with_repeated_word_in_one_field(self):
+        json_str = '{"key1": "word1 word1 word1"}'
+        required_fields = ["key1"]
+        keywords = ["word1"]
+
+        with mock.patch("parse_json.some_keyword_callback") as callback_mock:
+            parse_json(json_str, callback_mock, required_fields, keywords)
+            expected_calls = [
+                mock.call("word1"),
+                mock.call("word1"),
+                mock.call("word1"),
             ]
             self.assertEqual(expected_calls, callback_mock.mock_calls)
 
