@@ -9,6 +9,27 @@ from predict_message_mood import (
 
 
 class TestPredictMessageMood(unittest.TestCase):
+    def test_boundary_case_for_bad_thresholds(self):
+        mock_model = Mock(spec=SomeModel)
+        mock_model.predict.return_value = 0.3
+
+        self.assertEqual("норм", predict_message_mood("msg", mock_model))
+        mock_model.predict.assert_called_with("msg")
+
+    def test_boundary_case_for_good_thresholds(self):
+        mock_model = Mock(spec=SomeModel)
+        mock_model.predict.return_value = 0.8
+
+        self.assertEqual("норм", predict_message_mood("msg", mock_model))
+        mock_model.predict.assert_called_with("msg")
+
+    def test_case_with_value_close_to_boundary_threshold(self):
+        mock_model = Mock(spec=SomeModel)
+        mock_model.predict.return_value = 0.80001
+
+        self.assertEqual("отл", predict_message_mood("msg", mock_model))
+        mock_model.predict.assert_called_with("msg")
+
     def test_predict_bad_mood_with_default_thresholds(self):
         mock_model = Mock(spec=SomeModel)
         mock_model.predict.return_value = 0
