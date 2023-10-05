@@ -21,7 +21,7 @@ class TestCustomList(unittest.TestCase):
         self.assertTrue(CustomList([1, 2, 3, 4, 5]) == CustomList([15]))
         self.assertFalse(CustomList([1, 2]) == CustomList([1]))
 
-    def test_un_lists(self):
+    def test_ne_lists(self):
         self.assertTrue(CustomList([1, 2, 3]) != CustomList([1, 2, 3, 4, 5]))
         self.assertFalse(CustomList([0, 5]) != CustomList([5]))
 
