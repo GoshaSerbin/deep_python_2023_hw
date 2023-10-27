@@ -42,7 +42,7 @@ class CustomList(list):
         return self.__operate(other, "__sub__")
 
     def __radd__(self, other):
-        return self.__operate(other, "__add__")
+        return self + other
 
     def __rsub__(self, other):
-        return self.__operate(other, "__sub__")
+        return CustomList([-1 * i for i in self - other])
