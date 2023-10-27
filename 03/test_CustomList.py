@@ -94,6 +94,15 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(lists_sum), [3, 7, 3, 4])
         self.assertIsInstance(lists_sum, CustomList)
 
+    def test_custom_list_sub_base_list(self):
+        left_list = CustomList([1, 2, 3, 4])
+        right_list = [2, 5]
+        lists_sum = left_list - right_list
+        self.assertListEqual(list(left_list), [1, 2, 3, 4])
+        self.assertListEqual(list(right_list), [2, 5])
+        self.assertListEqual(list(lists_sum), [-1, -3, 3, 4])
+        self.assertIsInstance(lists_sum, CustomList)
+
     def test_base_list_add_custom_list(self):
         left_list = [2, 5]
         right_list = CustomList([1, 2, 3, 4])
