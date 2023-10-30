@@ -1,6 +1,6 @@
 import unittest
 
-from CustomMeta import CustomMeta
+from custom_meta import CustomMeta
 
 
 class TestCustomMeta(unittest.TestCase):
@@ -45,7 +45,6 @@ class TestCustomMeta(unittest.TestCase):
 
         self.assertRaises(AttributeError, getattr, inst, "x")
         self.assertRaises(AttributeError, getattr, inst, "val")
-        self.assertRaises(AttributeError, getattr, inst, "line")
         self.assertRaises(AttributeError, getattr, inst, "line")
         self.assertRaises(AttributeError, getattr, inst, "yyy")
 

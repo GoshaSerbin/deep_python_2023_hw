@@ -1,5 +1,5 @@
 class CustomMeta(type):
-    def __new__(mcs, name, bases, classdict, **kwargs):
+    def __new__(mcs, name, bases, classdict):
         custom_classdict = {}
         for k, v in classdict.items():
             if k.startswith("__") and k.endswith("__"):
@@ -10,11 +10,8 @@ class CustomMeta(type):
         cls = super().__new__(mcs, name, bases, classdict)
         return cls
 
-    def __init__(cls, name, bases, classdict, **kwargs):
-        super().__init__(name, bases, classdict, **kwargs)
-
     def __setattr__(cls, name, value):
-        if not name.startswith("__"):
+        if not (name.startswith("__") and name.endswith("__")):
             name = "custom_" + name
         super().__setattr__(name, value)
 
