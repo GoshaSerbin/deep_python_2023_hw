@@ -77,7 +77,7 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(right_list), [0, 1, 0, 1])
         self.assertListEqual(list(lists_sub), [1, 1, 3, 3])
 
-    def test_with_left_list_greater_than_right_list(self):
+    def test_sub_with_left_list_greater_than_right_list(self):
         left_list = CustomList([1, 2, 3, 4])
         right_list = CustomList([0, 1])
         lists_sub = left_list - right_list
@@ -85,7 +85,31 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(right_list), [0, 1])
         self.assertListEqual(list(lists_sub), [1, 1, 3, 4])
 
-    def test_custom_list_add_base_list(self):
+    def test_sub_with_right_list_greater_than_left_list(self):
+        left_list = CustomList([1, 2])
+        right_list = CustomList([0, 1, 2, 3])
+        lists_sub = left_list - right_list
+        self.assertListEqual(list(left_list), [1, 2])
+        self.assertListEqual(list(right_list), [0, 1, 2, 3])
+        self.assertListEqual(list(lists_sub), [1, 1, -2, -3])
+
+    def test_add_with_left_list_greater_than_right_list(self):
+        left_list = CustomList([1, 2, 3, 4])
+        right_list = CustomList([1, 2, 3])
+        lists_add = left_list + right_list
+        self.assertListEqual(list(left_list), [1, 2, 3, 4])
+        self.assertListEqual(list(right_list), [1, 2, 3])
+        self.assertListEqual(list(lists_add), [2, 4, 6, 4])
+
+    def test_add_with_right_list_greater_than_left_list(self):
+        left_list = CustomList([1, 2])
+        right_list = CustomList([3, 4, 5, 6])
+        lists_add = left_list + right_list
+        self.assertListEqual(list(left_list), [1, 2])
+        self.assertListEqual(list(right_list), [3, 4, 5, 6])
+        self.assertListEqual(list(lists_add), [4, 6, 5, 6])
+
+    def test_long_custom_list_add_short_base_list(self):
         left_list = CustomList([1, 2, 3, 4])
         right_list = [2, 5]
         lists_sum = left_list + right_list
@@ -94,7 +118,16 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(lists_sum), [3, 7, 3, 4])
         self.assertIsInstance(lists_sum, CustomList)
 
-    def test_custom_list_sub_base_list(self):
+    def test_short_custom_list_add_long_base_list(self):
+        left_list = CustomList([2, 5])
+        right_list = [1, 2, 3, 4]
+        lists_sum = left_list + right_list
+        self.assertListEqual(list(left_list), [2, 5])
+        self.assertListEqual(list(right_list), [1, 2, 3, 4])
+        self.assertListEqual(list(lists_sum), [3, 7, 3, 4])
+        self.assertIsInstance(lists_sum, CustomList)
+
+    def test_long_custom_list_sub_short_base_list(self):
         left_list = CustomList([1, 2, 3, 4])
         right_list = [2, 5]
         lists_sum = left_list - right_list
@@ -103,7 +136,16 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(lists_sum), [-1, -3, 3, 4])
         self.assertIsInstance(lists_sum, CustomList)
 
-    def test_base_list_add_custom_list(self):
+    def test_short_custom_list_sub_long_base_list(self):
+        left_list = CustomList([2, 5])
+        right_list = [1, 2, 3, 4]
+        lists_sub = left_list - right_list
+        self.assertListEqual(list(left_list), [2, 5])
+        self.assertListEqual(list(right_list), [1, 2, 3, 4])
+        self.assertListEqual(list(lists_sub), [1, 3, -3, -4])
+        self.assertIsInstance(lists_sub, CustomList)
+
+    def test_short_base_list_add_long_custom_list(self):
         left_list = [2, 5]
         right_list = CustomList([1, 2, 3, 4])
         lists_sum = left_list + right_list
@@ -112,11 +154,29 @@ class TestCustomList(unittest.TestCase):
         self.assertListEqual(list(lists_sum), [3, 7, 3, 4])
         self.assertIsInstance(lists_sum, CustomList)
 
-    def test_base_list_sub_custom_list(self):
+    def test_long_base_list_add_short_custom_list(self):
+        left_list = [1, 2, 3, 4]
+        right_list = CustomList([2, 5])
+        lists_sum = left_list + right_list
+        self.assertListEqual(list(left_list), [1, 2, 3, 4])
+        self.assertListEqual(list(right_list), [2, 5])
+        self.assertListEqual(list(lists_sum), [3, 7, 3, 4])
+        self.assertIsInstance(lists_sum, CustomList)
+
+    def test_short_base_list_sub_long_custom_list(self):
         left_list = [2, 5]
         right_list = CustomList([1, 2, 3, 4])
         lists_dif = left_list - right_list
         self.assertListEqual(list(left_list), [2, 5])
         self.assertListEqual(list(right_list), [1, 2, 3, 4])
         self.assertListEqual(list(lists_dif), [1, 3, -3, -4])
+        self.assertIsInstance(lists_dif, CustomList)
+
+    def test_long_base_list_sub_short_custom_list(self):
+        left_list = [1, 2, 3, 4]
+        right_list = CustomList([2, 5])
+        lists_dif = left_list - right_list
+        self.assertListEqual(list(left_list), [1, 2, 3, 4])
+        self.assertListEqual(list(right_list), [2, 5])
+        self.assertListEqual(list(lists_dif), [-1, -3, 3, 4])
         self.assertIsInstance(lists_dif, CustomList)
