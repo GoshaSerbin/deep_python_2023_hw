@@ -1,6 +1,6 @@
 import unittest
 
-from CustomList import CustomList
+from custom_list import CustomList
 
 
 class TestCustomList(unittest.TestCase):
