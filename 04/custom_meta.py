@@ -26,7 +26,9 @@ class CustomMeta(type):
         instance.__dict__ = custom_dict
 
         def custom_setattr(self, name, value):
-            super(self.__class__, self).__setattr__("custom_" + name, value)
+            if not (name.startswith("__") and name.endswith("__")):
+                name = "custom_" + name
+            super(self.__class__, self).__setattr__(name, value)
 
         cls.__setattr__ = custom_setattr
 
