@@ -69,3 +69,43 @@ class TestCustomMeta(unittest.TestCase):
         CustomClass = CustomMeta("CustomClass", (), {"x": 50})
         self.assertEqual(CustomClass.custom_x, 50)
         self.assertRaises(AttributeError, getattr, CustomClass, "x")
+
+    def test_setattr_for_class(self):
+        class CustomClass(metaclass=CustomMeta):
+            pass
+
+        setattr(CustomClass, "x", 10)
+        self.assertEqual(CustomClass.custom_x, 10)
+        self.assertRaises(AttributeError, getattr, CustomClass, "x")
+
+        setattr(CustomClass, "_protected_x", 10)
+        self.assertEqual(CustomClass.custom__protected_x, 10)
+        self.assertRaises(AttributeError, getattr, CustomClass, "_protected_x")
+
+        setattr(CustomClass, "__private_x", 10)
+        self.assertEqual(CustomClass.custom___private_x, 10)
+        self.assertRaises(AttributeError, getattr, CustomClass, "x")
+
+        setattr(CustomClass, "__magic__", 10)
+        self.assertEqual(CustomClass.__magic__, 10)
+
+    def test_setattr_for_class_instance(self):
+        class CustomClass(metaclass=CustomMeta):
+            pass
+
+        inst = CustomClass()
+
+        setattr(inst, "x", 10)
+        self.assertEqual(inst.custom_x, 10)
+        self.assertRaises(AttributeError, getattr, inst, "x")
+
+        setattr(inst, "_protected_x", 10)
+        self.assertEqual(inst.custom__protected_x, 10)
+        self.assertRaises(AttributeError, getattr, inst, "_protected_x")
+
+        setattr(inst, "__private_x", 10)
+        self.assertEqual(inst.custom___private_x, 10)
+        self.assertRaises(AttributeError, getattr, inst, "x")
+
+        setattr(inst, "__magic__", 10)
+        self.assertEqual(inst.__magic__, 10)
