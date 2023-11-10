@@ -10,9 +10,11 @@ class TestClient(unittest.TestCase):
     def test_socket_connect_called(self, socket_mock, _):
         client = Client(thread_num=1, file_name="test_data/urls.txt")
         client.start()
-        socket_mock.return_value.__enter__.return_value.connect.assert_called_once_with(
-            (HOST_NAME, PORT)
+        expected = [mock.call((HOST_NAME, PORT))] * 3
+        actual = (
+            socket_mock.return_value.__enter__.return_value.connect.mock_calls
         )
+        self.assertEqual(expected, actual)
 
     @mock.patch("builtins.print")
     @mock.patch("client.socket.socket")
@@ -25,27 +27,24 @@ class TestClient(unittest.TestCase):
         self.assertEqual(producer_task_mock.mock_calls, [mock.call()])
 
     @mock.patch("builtins.print")
-    @mock.patch("client.Client.send_requests_to_server")
     @mock.patch("client.socket.socket")
-    def test_consumer_tasks_called(self, socket_mock, consumer_task_mock, _):
+    @mock.patch("client.Client.send_requests_to_server")
+    def test_consumer_tasks_called(self, consumer_task_mock, *_args):
         client = Client(thread_num=1, file_name="test_data/urls.txt")
         client.start()
-        self.assertEqual(
-            consumer_task_mock.mock_calls,
-            [mock.call(socket_mock.return_value.__enter__.return_value)],
-        )
+        consumer_task_mock.assert_called_once_with()
 
     @mock.patch("builtins.print")
-    @mock.patch("client.Client.send_requests_to_server")
     @mock.patch("client.socket.socket")
+    @mock.patch("client.Client.send_requests_to_server")
     def test_consumer_tasks_called_with_many_threads(
-        self, socket_mock, consumer_task_mock, _
+        self, consumer_task_mock, *_args
     ):
         client = Client(thread_num=100, file_name="test_data/urls.txt")
         client.start()
         self.assertEqual(
             consumer_task_mock.mock_calls,
-            100 * [mock.call(socket_mock.return_value.__enter__.return_value)],
+            100 * [mock.call()],
         )
 
     @mock.patch("builtins.print")
