@@ -24,37 +24,36 @@ class Client:
             for url in file:
                 self.q.put(url)
 
-    def send_requests_to_server(self, client_sock: socket):
+    def send_requests_to_server(self):
         while True:
             url = self.q.get()
             if isinstance(url, DeadPill):
                 self.q.put(url)
                 return
-            client_sock.send(url.encode())
-            data = client_sock.recv(DATA_SIZE)
-            print(url.strip(), ":", data.decode())
+            with socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM
+            ) as client_sock:
+                client_sock.connect((HOST_NAME, PORT))
+                client_sock.send(url.encode())
+                data = client_sock.recv(DATA_SIZE)
+                print(url.strip(), ":", data.decode())
 
     def start(self):
         producer = threading.Thread(target=self.add_requests_to_queue)
         producer.start()
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
-            client_sock.connect((HOST_NAME, PORT))
 
-            consumers = [
-                threading.Thread(
-                    target=self.send_requests_to_server,
-                    args=(client_sock,),
-                )
-                for _ in range(self.thread_num)
-            ]
-            for consumer in consumers:
-                consumer.start()
+        consumers = [
+            threading.Thread(target=self.send_requests_to_server)
+            for _ in range(self.thread_num)
+        ]
+        for consumer in consumers:
+            consumer.start()
 
-            producer.join()
-            self.q.put(DeadPill())
+        producer.join()
+        self.q.put(DeadPill())
 
-            for consumer in consumers:
-                consumer.join()
+        for consumer in consumers:
+            consumer.join()
 
 
 if __name__ == "__main__":
