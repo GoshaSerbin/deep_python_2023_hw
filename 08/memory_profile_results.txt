@@ -1,0 +1,95 @@
+INSTANCES CREATION (10000 objects): in msec
+Default:    452.9574
+Slots:      446.0972
+Weakref:    465.5021
+READ OPERATION (10000 objects): in msec
+Default:   1001.0287
+Slots:     1005.8133
+Weakref:   1023.4298
+WRITE OPERATION (10000 objects): in msec
+Default:   1406.6827
+Slots:     1334.4491
+Weakref:   1375.6514
+Filename: /home/george/Documents/Code/Deep Python/08/comparison.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    14     36.4 MiB     36.4 MiB           1   def test(repeats_number: int, model_depth: int):
+    15     36.4 MiB      0.0 MiB           1       feature_size = 5
+    16     36.6 MiB      0.1 MiB           1       x = np.random.rand(feature_size)
+    17     36.6 MiB      0.0 MiB           1       b = np.ones_like(x)
+    18     36.6 MiB      0.0 MiB           1       w = np.identity(feature_size)
+    19                                         
+    20     36.6 MiB      0.0 MiB           1       print(f"INSTANCES CREATION ({model_depth} objects): in msec")
+    21                                         
+    22     36.6 MiB      0.0 MiB           1       t1 = time.time()
+    23     39.9 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    24     39.9 MiB      3.4 MiB      150045           layers = [Linear(w, b) for _ in range(model_depth)]
+    25     39.9 MiB      0.0 MiB           1       t2 = time.time()
+    26     39.9 MiB      0.0 MiB           1       print_time_ms("Default", (t2 - t1) / repeats_number)
+    27                                         
+    28     39.9 MiB      0.0 MiB           1       t1 = time.time()
+    29     40.1 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    30     40.1 MiB      0.1 MiB      150045           slots_layers = [SlotsLinear(w, b) for _ in range(model_depth)]
+    31     40.1 MiB      0.0 MiB           1       t2 = time.time()
+    32     40.1 MiB      0.0 MiB           1       print_time_ms("Slots", (t2 - t1) / repeats_number)
+    33                                         
+    34     40.1 MiB      0.0 MiB           1       t1 = time.time()
+    35     42.1 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    36     42.1 MiB      2.0 MiB      150045           weakref_layers = [WeakrefLinear(w, b) for _ in range(model_depth)]
+    37     42.1 MiB      0.0 MiB           1       t2 = time.time()
+    38     42.1 MiB      0.0 MiB           1       print_time_ms("Weakref", (t2 - t1) / repeats_number)
+    39                                         
+    40     42.1 MiB      0.0 MiB           1       print(f"READ OPERATION ({model_depth} objects): in msec")
+    41                                         
+    42     42.1 MiB      0.0 MiB           1       t1 = time.time()
+    43     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    44     42.3 MiB      0.1 MiB          15           x = np.random.rand(feature_size)
+    45     42.3 MiB      0.0 MiB      150015           for layer in layers:
+    46     42.3 MiB      0.1 MiB      150000               x = layer.forward(x)
+    47     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    48     42.3 MiB      0.0 MiB           1       print_time_ms("Default", (t2 - t1) / repeats_number)
+    49                                         
+    50     42.3 MiB      0.0 MiB           1       t1 = time.time()
+    51     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    52     42.3 MiB      0.0 MiB          15           x = np.random.rand(feature_size)
+    53     42.3 MiB      0.0 MiB      150015           for layer in slots_layers:
+    54     42.3 MiB      0.0 MiB      150000               x = layer.forward(x)
+    55     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    56     42.3 MiB      0.0 MiB           1       print_time_ms("Slots", (t2 - t1) / repeats_number)
+    57                                         
+    58     42.3 MiB      0.0 MiB           1       t1 = time.time()
+    59     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    60     42.3 MiB      0.0 MiB          15           x = np.random.rand(feature_size)
+    61     42.3 MiB      0.0 MiB      150015           for layer in weakref_layers:
+    62     42.3 MiB      0.0 MiB      150000               x = layer.forward(x)
+    63     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    64     42.3 MiB      0.0 MiB           1       print_time_ms("Weakref", (t2 - t1) / repeats_number)
+    65                                         
+    66     42.3 MiB      0.0 MiB           1       print(f"WRITE OPERATION ({model_depth} objects): in msec")
+    67                                         
+    68     42.3 MiB      0.0 MiB           1       t1 = time.time()
+    69     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    70     42.3 MiB      0.0 MiB      150015           for layer in layers:
+    71     42.3 MiB      0.0 MiB      150000               layer.weights = w
+    72     42.3 MiB      0.0 MiB      150000               layer.biases = b
+    73     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    74     42.3 MiB      0.0 MiB           1       print_time_ms("Default", (t2 - t1) / repeats_number)
+    75                                         
+    76     42.3 MiB      0.0 MiB           1       t1 = time.time()
+    77     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    78     42.3 MiB      0.0 MiB      150015           for layer in slots_layers:
+    79     42.3 MiB      0.0 MiB      150000               layer.weights = w
+    80     42.3 MiB      0.0 MiB      150000               layer.biases = b
+    81     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    82     42.3 MiB      0.0 MiB           1       print_time_ms("Slots", (t2 - t1) / repeats_number)
+    83                                         
+    84     42.3 MiB      0.0 MiB           1       t1 = time.time()
+    85     42.3 MiB      0.0 MiB          16       for _ in range(repeats_number):
+    86     42.3 MiB      0.0 MiB      150015           for layer in weakref_layers:
+    87     42.3 MiB      0.0 MiB      150000               layer.weights = weakref.ref(w)
+    88     42.3 MiB      0.0 MiB      150000               layer.biases = weakref.ref(b)
+    89     42.3 MiB      0.0 MiB           1       t2 = time.time()
+    90     42.3 MiB      0.0 MiB           1       print_time_ms("Weakref", (t2 - t1) / repeats_number)
+
+

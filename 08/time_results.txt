@@ -1,0 +1,12 @@
+INSTANCES CREATION (100000 objects): in msec
+Default:     67.2797
+Slots:       51.6447
+Weakref:    130.5193
+READ OPERATION (100000 objects): in msec
+Default:    136.2922
+Slots:      132.6354
+Weakref:    156.7040
+WRITE OPERATION (100000 objects): in msec
+Default:      6.4935
+Slots:        4.7127
+Weakref:     20.8935
