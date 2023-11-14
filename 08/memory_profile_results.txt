@@ -1,15 +1,3 @@
-INSTANCES CREATION (10000 objects): in msec
-Default:    452.9574
-Slots:      446.0972
-Weakref:    465.5021
-READ OPERATION (10000 objects): in msec
-Default:   1001.0287
-Slots:     1005.8133
-Weakref:   1023.4298
-WRITE OPERATION (10000 objects): in msec
-Default:   1406.6827
-Slots:     1334.4491
-Weakref:   1375.6514
 Filename: /home/george/Documents/Code/Deep Python/08/comparison.py
 
 Line #    Mem usage    Increment  Occurrences   Line Contents
