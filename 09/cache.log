@@ -1,0 +1,42 @@
+2023-11-16 12:19:03,679	INFO	__main__	Start LRUCache init
+2023-11-16 12:19:03,679	ERROR	__main__	got invalid limit -100<=0. Using default value 42
+2023-11-16 12:19:03,679	INFO	__main__	End LRUCache init
+2023-11-16 12:19:03,679	INFO	__main__	Start LRUCache init
+2023-11-16 12:19:03,679	INFO	__main__	End LRUCache init
+2023-11-16 12:19:03,679	INFO	__main__	Start LRUCache get('k1')
+2023-11-16 12:19:03,679	INFO	__main__	Key 'k1' is not in cache
+2023-11-16 12:19:03,679	INFO	__main__	End LRUCache get('k1') with return None
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k1','val1')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k1' is not yet in cache
+2023-11-16 12:19:03,680	INFO	__main__	Cache size before adding 'k1' is 0
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache set('k1','val1')
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache get('k1')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k1' is in cache
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache get('k1') with return 'val1'
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k2','val2')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k2' is not yet in cache
+2023-11-16 12:19:03,680	INFO	__main__	Cache size before adding 'k2' is 1
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache set('k2','val2')
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k3','val3')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k3' is not yet in cache
+2023-11-16 12:19:03,680	INFO	__main__	Cache size before adding 'k3' is 2
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache set('k3','val3')
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k4','val3')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k4' is not yet in cache
+2023-11-16 12:19:03,680	INFO	__main__	Cache size before adding 'k4' is 3
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache set('k4','val3')
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k5','val5')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k5' is not yet in cache
+2023-11-16 12:19:03,680	WARNING	__main__	Cache size 4 is close to limie 5
+2023-11-16 12:19:03,680	INFO	__main__	End LRUCache set('k5','val5')
+2023-11-16 12:19:03,680	INFO	__main__	Start LRUCache set('k6','val6')
+2023-11-16 12:19:03,680	INFO	__main__	Key 'k6' is not yet in cache
+2023-11-16 12:19:03,681	WARNING	__main__	Cache reached max size (5)
+2023-11-16 12:19:03,681	INFO	__main__	Deleted key 'k1' with value 'val1'
+2023-11-16 12:19:03,681	INFO	__main__	End LRUCache set('k6','val6')
+2023-11-16 12:19:03,681	INFO	__main__	Start LRUCache get('k1')
+2023-11-16 12:19:03,681	INFO	__main__	Key 'k1' is not in cache
+2023-11-16 12:19:03,681	INFO	__main__	End LRUCache get('k1') with return None
+2023-11-16 12:19:03,681	INFO	__main__	Start LRUCache get('k6')
+2023-11-16 12:19:03,681	INFO	__main__	Key 'k6' is in cache
+2023-11-16 12:19:03,681	INFO	__main__	End LRUCache get('k6') with return 'val6'
