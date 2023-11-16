@@ -35,10 +35,6 @@ class Node:
         self.next = None
 
 
-class InvalidArguments(Exception):
-    pass
-
-
 class DoublyLinkedList:
     """Реализация двусвязного списка
     со специфическими методами, необходимыми для задачи"""
