@@ -3,3 +3,7 @@ __pycache__
 .coverage
 venv
 script.sh
+build
+*.egg-info
+dist
+*.so
