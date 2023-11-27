@@ -2,29 +2,39 @@ import argparse
 import logging
 
 
-class Filter(logging.Filter):
-    def filter(self, record):
-        return len(record.getMessage().split()) % 2 == 0
-
-
-file_formatter = logging.Formatter(
-    "%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s"
-)
-file_handler = logging.FileHandler("cache.log", mode="w")
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(file_formatter)
-
-stream_formatter = logging.Formatter(
-    "%(asctime)s\t%(levelname)s\t%(name)s\t%(filename)s\t"
-    "%(lineno)d\t%(threadName)s\t%(message)s"
-)
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-stream_handler.setFormatter(stream_formatter)
-
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.propagate = False
+
+
+def logging_configure(args: argparse.Namespace):
+    class Filter(logging.Filter):
+        def filter(self, record):
+            return len(record.getMessage().split()) % 2 == 0
+
+    file_formatter = logging.Formatter(
+        "%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s"
+    )
+    file_handler = logging.FileHandler("cache.log", mode="w")
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(file_formatter)
+
+    stream_formatter = logging.Formatter(
+        "%(asctime)s\t%(levelname)s\t%(name)s\t%(filename)s\t"
+        "%(lineno)d\t%(threadName)s\t%(message)s"
+    )
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(stream_formatter)
+
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    logger.addHandler(file_handler)
+    if args.with_filter:
+        odd_messages_filter = Filter()
+        stream_handler.addFilter(odd_messages_filter)
+        file_handler.addFilter(odd_messages_filter)
+    if args.to_stdout:
+        logger.addHandler(stream_handler)
 
 
 class Node:
@@ -160,14 +170,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--to_stdout", action="store_true")
     parser.add_argument("-f", "--with_filter", action="store_true")
-    args = parser.parse_args()
-
-    logger.addHandler(file_handler)
-    if args.with_filter:
-        oddMessagesFilter = Filter()
-        stream_handler.addFilter(oddMessagesFilter)
-        file_handler.addFilter(oddMessagesFilter)
-    if args.to_stdout:
-        logger.addHandler(stream_handler)
-
+    logging_configure(parser.parse_args())
     lru_cache_work()
