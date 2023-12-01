@@ -88,7 +88,6 @@ class TestFetcher(IsolatedAsyncioTestCase):
                     await fetcher.fetch()
 
                     # отправленные запросы
-
                     get_expected_calls = url_num * [
                         mock.call("url", timeout=1),
                         mock.call().__aenter__(),
