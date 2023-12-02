@@ -20,7 +20,7 @@ static PyObject* loads(PyObject* self, PyObject* args) {
     const char* token_start;
     const char* token_end = json_string;
     
-    while(1) {
+    while(true) {
         // parse key
         token_start = strchr(token_end, '\"');
         if(token_start == NULL) {
@@ -85,7 +85,7 @@ static PyObject* dumps(PyObject* self, PyObject*  args) {
     PyObject* items_list = PyDict_Items(dict);
     size_t list_len = PyList_Size(items_list);
 
-    size_t current_string_size = 3000 + 6 * list_len; // {"k": v}\0;
+    size_t current_string_size = 4 + 6 * list_len; // {"k": v}\0;
     char* dict_string = malloc(current_string_size * sizeof(char));
     dict_string[0] = '{';
     dict_string[1] = '\0';
