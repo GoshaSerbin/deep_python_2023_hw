@@ -5,10 +5,6 @@ import asyncio
 from fetcher import Fetcher
 
 
-async def func():
-    await asyncio.sleep(4)
-
-
 class TestFetcher(IsolatedAsyncioTestCase):
     @mock.patch("fetcher.aiohttp.ClientSession.get")
     async def test_fetch_url(self, get_mock):
