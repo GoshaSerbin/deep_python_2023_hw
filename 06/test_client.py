@@ -1,5 +1,6 @@
 import unittest
 from unittest import mock
+from unittest.mock import mock_open
 
 from client import Client, HOST_NAME, PORT, DeadPill
 
@@ -25,14 +26,6 @@ class TestClient(unittest.TestCase):
         client = Client(thread_num=1, file_name="test_data/urls.txt")
         client.start()
         self.assertEqual(producer_task_mock.mock_calls, [mock.call()])
-
-    @mock.patch("builtins.print")
-    @mock.patch("client.socket.socket")
-    @mock.patch("client.Client.send_requests_to_server")
-    def test_consumer_tasks_called(self, consumer_task_mock, *_args):
-        client = Client(thread_num=1, file_name="test_data/urls.txt")
-        client.start()
-        consumer_task_mock.assert_called_once_with()
 
     @mock.patch("builtins.print")
     @mock.patch("client.socket.socket")
@@ -72,3 +65,28 @@ class TestClient(unittest.TestCase):
             ],
             any_order=True,
         )
+
+    @mock.patch("client.socket.socket")
+    def test_requests_and_responses_for_different_thread_and_url_num(
+        self, socket_mock
+    ):
+        socket_mock.return_value.__enter__.return_value.recv.return_value = (
+            b"response"
+        )
+        for thread_num in range(1, 10):
+            for url_num in range(1, 10):
+                with (
+                    mock.patch(
+                        "builtins.open",
+                        new_callable=mock_open,
+                        read_data="url\n" * url_num,
+                    ),
+                    mock.patch("builtins.print") as print_mock,
+                ):
+                    client = Client(thread_num=thread_num, file_name="")
+                    client.start()
+
+                    # отправленные запросы и полученные ответы
+                    print_mock.assert_has_calls(
+                        url_num * [mock.call("url", ":", "response")]
+                    )

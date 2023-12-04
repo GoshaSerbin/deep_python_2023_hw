@@ -17,7 +17,7 @@ class Client:
     def __init__(self, thread_num: int, file_name: str):
         self.thread_num = int(thread_num)
         self.file_name = file_name
-        self.q = Queue()
+        self.q = Queue(maxsize=self.thread_num)
 
     def add_requests_to_queue(self):
         with open(self.file_name, "r", encoding="UTF-8") as file:
@@ -30,13 +30,16 @@ class Client:
             if isinstance(url, DeadPill):
                 self.q.put(url)
                 return
-            with socket.socket(
-                socket.AF_INET, socket.SOCK_STREAM
-            ) as client_sock:
-                client_sock.connect((HOST_NAME, PORT))
-                client_sock.send(url.encode())
-                data = client_sock.recv(DATA_SIZE)
-                print(url.strip(), ":", data.decode())
+            try:
+                with socket.socket(
+                    socket.AF_INET, socket.SOCK_STREAM
+                ) as client_sock:
+                    client_sock.connect((HOST_NAME, PORT))
+                    client_sock.send(url.encode())
+                    data = client_sock.recv(DATA_SIZE)
+                    print(url.strip(), ":", data.decode())
+            except Exception as e:
+                print(e)
 
     def start(self):
         producer = threading.Thread(target=self.add_requests_to_queue)

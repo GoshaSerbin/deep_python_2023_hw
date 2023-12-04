@@ -28,7 +28,7 @@ class Server:
         self.top_num = int(top_num)
         self.statistic = 0
         self.lock = threading.Lock()
-        self.q = Queue()
+        self.q = Queue(maxsize=self.thread_num)
 
     def is_working(self):
         return True
@@ -41,7 +41,11 @@ class Server:
                 self.q.put(task)
                 return
 
-            url, client_sock = task
+            client_sock = task
+            data = client_sock.recv(DATA_SIZE)
+            if not data:
+                continue
+            url = data.decode()
 
             try:
                 with urlopen(url, timeout=1.0) as response:
@@ -53,6 +57,8 @@ class Server:
                 answer = "URL error."
             except TimeoutError:
                 answer = "Timeout error"
+            except Exception:
+                answer = "Unknown error"
 
             client_sock.sendall(answer.encode())
 
@@ -81,10 +87,7 @@ class Server:
             except TimeoutError:
                 break
 
-            data = client_sock.recv(DATA_SIZE)
-            if not data:
-                break
-            self.q.put((data.decode(), client_sock))
+            self.q.put(client_sock)
         client_sock.close()
 
         self.q.put(DeadPill())
